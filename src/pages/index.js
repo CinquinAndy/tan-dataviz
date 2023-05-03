@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Map from '@components/Map'
 import React from 'react'
 import Image from 'next/image'
-import {gps_coordinates_nantes} from "@/utils/consts";
+import { gps_coordinates_nantes } from '@/utils/consts'
 
 export default function Home() {
 	return (

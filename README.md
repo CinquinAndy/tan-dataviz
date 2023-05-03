@@ -9,7 +9,6 @@ Settings > Languages & Frameworks > JavaScript > Code Quality Tools > ESLint > A
 
 ---
 
-
 ## Getting Started
 
 First, run the development server:
