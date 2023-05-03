@@ -3,8 +3,7 @@ import Head from 'next/head'
 import Map from '@components/Map'
 import React from 'react'
 import Image from 'next/image'
-
-const DEFAULT_CENTER = [38.907132, -77.036546]
+import {gps_coordinates_nantes} from "@/utils/consts";
 
 export default function Home() {
 	return (
@@ -37,14 +36,14 @@ export default function Home() {
 						Dataviz
 					</h2>
 				</div>
-				<Map width="800" height="400" center={DEFAULT_CENTER} zoom={12}>
+				<Map width="800" height="400" center={gps_coordinates_nantes} zoom={12}>
 					{({ TileLayer, Marker, Popup }) => (
 						<>
 							<TileLayer
 								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 								attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 							/>
-							<Marker position={DEFAULT_CENTER}>
+							<Marker position={gps_coordinates_nantes}>
 								<Popup>
 									A pretty CSS3 popup. <br /> Easily customizable.
 								</Popup>
