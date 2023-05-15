@@ -5,14 +5,14 @@ import React from 'react'
 import Image from 'next/image'
 import { gps_coordinates_nantes } from '@/utils/consts'
 import { useQuery } from '@tanstack/react-query'
-import { log } from 'next/dist/server/typescript/utils'
+import { iconPerson } from '@components/Icons/iconPerson'
 
 export default function Home() {
 	const { isLoading, isError, data, error } = useQuery({
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=10`,
+				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=2000`,
 				{
 					method: 'GET',
 					headers: {
@@ -82,6 +82,7 @@ export default function Home() {
 									<Marker
 										key={stop.id}
 										position={[stop.stop_lat, stop.stop_lon]}
+										icon={iconPerson}
 									>
 										<Popup>{stop.stop_name}</Popup>
 									</Marker>
