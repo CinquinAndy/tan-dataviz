@@ -1,6 +1,6 @@
 import L from 'leaflet'
 
-const iconPerson = new L.Icon({
+const iconBus = new L.Icon({
 	iconUrl: './leaflet/bus-stop.svg',
 	iconRetinaUrl: './leaflet/bus-stop.svg',
 	iconAnchor: null,
@@ -8,7 +8,7 @@ const iconPerson = new L.Icon({
 	shadowUrl: null,
 	shadowSize: null,
 	shadowAnchor: null,
-	iconSize: new L.Point(75, 25),
+	iconSize: new L.Point(75, 30),
 })
 
-export { iconPerson }
+export { iconBus }

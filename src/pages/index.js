@@ -5,7 +5,8 @@ import React from 'react'
 import Image from 'next/image'
 import { gps_coordinates_nantes } from '@/utils/consts'
 import { useQuery } from '@tanstack/react-query'
-import { iconPerson } from '@components/Icons/iconPerson'
+import { iconBus } from '@components/Icons/iconBus'
+import { iconTram } from '@components/Icons/iconTram'
 
 export default function Home() {
 	const { isLoading, isError, data, error } = useQuery({
@@ -82,7 +83,7 @@ export default function Home() {
 									<Marker
 										key={stop.id}
 										position={[stop.stop_lat, stop.stop_lon]}
-										icon={iconPerson}
+										icon={stop.location_type === 1 ? iconBus : iconTram}
 									>
 										<Popup>{stop.stop_name}</Popup>
 									</Marker>
