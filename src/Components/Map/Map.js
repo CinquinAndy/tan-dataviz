@@ -13,9 +13,13 @@ const DEFAULT_HEIGHT = 600
 const Map = props => {
 	const { width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT } = props
 	return (
-		<div style={{ aspectRatio: width / height }}>
-			<DynamicMap {...props} />
-		</div>
+		<>
+			{typeof window !== 'undefined' && (
+				<div style={{ aspectRatio: width / height }}>
+					<DynamicMap {...props} />
+				</div>
+			)}
+		</>
 	)
 }
 

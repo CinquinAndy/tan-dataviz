@@ -1,14 +1,36 @@
 import Head from 'next/head'
 
 import Map from '@components/Map'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { gps_coordinates_nantes } from '@/utils/consts'
 import { useQuery } from '@tanstack/react-query'
-import { iconBus } from '@components/Icons/iconBus'
-import { iconTram } from '@components/Icons/iconTram'
+import dynamic from 'next/dynamic'
 
 export default function Home() {
+	const [iconBus, setIconBus] = React.useState(null)
+	const [iconTram, setIconTram] = React.useState(null)
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			import('leaflet').then(L => {
+				setIconBus(
+					new L.Icon({
+						iconUrl: './leaflet/bus-stop.svg',
+						iconRetinaUrl: './leaflet/bus-stop.svg',
+						iconSize: new L.Point(75, 30),
+					})
+				)
+				setIconTram(
+					new L.Icon({
+						iconUrl: './leaflet/tram-stop.svg',
+						iconRetinaUrl: './leaflet/tram-stop.svg',
+						iconSize: new L.Point(75, 30),
+					})
+				)
+			})
+		}
+	}, [])
+
 	const { isLoading, isError, data, error } = useQuery({
 		queryKey: ['stops'],
 		queryFn: async () => {
@@ -61,37 +83,44 @@ export default function Home() {
 						Dataviz
 					</h2>
 				</div>
-				<Map
-					width="800"
-					height="400"
-					center={gps_coordinates_nantes}
-					scrollWheelZoom={false}
-					zoom={16}
-					onDragend={value => {
-						console.log(value)
-					}}
-				>
-					{({ TileLayer, Marker, Popup }) => (
-						<>
-							<TileLayer
-								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-								attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-							/>
-							{console.log()}
-							{data.map(stop => {
-								return (
-									<Marker
-										key={stop.id}
-										position={[stop.stop_lat, stop.stop_lon]}
-										icon={stop.location_type === 1 ? iconBus : iconTram}
-									>
-										<Popup>{stop.stop_name}</Popup>
-									</Marker>
-								)
-							})}
-						</>
-					)}
-				</Map>
+				{typeof window !== 'undefined' && (
+					<Map
+						width="800"
+						height="400"
+						center={gps_coordinates_nantes}
+						scrollWheelZoom={false}
+						zoom={16}
+						onDragend={value => {
+							console.log(value)
+						}}
+					>
+						{({ TileLayer, Marker, Popup }) => (
+							<>
+								<TileLayer
+									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+									attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+								/>
+								{data.map(stop => {
+									return (
+										<Marker
+											key={stop.id}
+											position={[stop.stop_lat, stop.stop_lon]}
+											icon={stop.location_type === 1 ? iconBus : iconTram}
+										>
+											<Popup>
+												{stop.stop_name}
+												<br />
+												{stop.location_type === 1 ? 'Bus' : 'Tram'}
+												<br />
+												{stop.wheelchair_boarding}
+											</Popup>
+										</Marker>
+									)
+								})}
+							</>
+						)}
+					</Map>
+				)}
 			</section>
 		</>
 	)
