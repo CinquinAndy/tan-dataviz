@@ -5,10 +5,12 @@ import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { gps_coordinates_nantes } from '@/utils/consts'
 import { useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 
 export default function Home() {
 	const [isLoadingStopTimes, setIsLoadingStopTimes] = React.useState(true)
 	const [popupStopHeadsignName, setPopupStopHeadsignName] = React.useState(null)
+	const [popupStopLineName, setPopupStopLineName] = React.useState(null)
 	const [popupStopType, setPopupStopType] = React.useState(null)
 	const [popupWheelchairAccessible, setPopupWheelchairAccessible] =
 		React.useState(null)
@@ -64,7 +66,7 @@ export default function Home() {
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=200`,
+				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=1000`,
 				{
 					method: 'GET',
 					headers: {
@@ -240,6 +242,9 @@ export default function Home() {
 																	fetchDataRoutesLimits(r[0].route_id).then(
 																		r => {
 																			if (r !== undefined && r.length > 0) {
+																				setPopupStopLineName(
+																					r[0].route_short_name
+																				)
 																				setIsLoadingStopTimes(false)
 																				console.log('route')
 																				console.log(r[0])
@@ -270,7 +275,10 @@ export default function Home() {
 													{!isLoadingStopTimes ? (
 														<div className={'flex flex-col'}>
 															<span className={'text-xs italic text-slate-700'}>
-																Ligne : {popupStopHeadsignName}
+																Ligne : {popupStopLineName}
+															</span>
+															<span className={'text-xs italic text-slate-700'}>
+																Direction : {popupStopHeadsignName}
 															</span>
 															{/* Type of stops */}
 															<span className={'text-xs text-slate-500'}>
@@ -292,6 +300,14 @@ export default function Home() {
 																	) : null}
 																</div>
 															)}
+															<Link
+																className={
+																	'mt-2 rounded bg-indigo-700 px-3 py-2 text-xs !text-white'
+																}
+																href={`https://www.tan.fr/fr/fiche-horaires-ligne-${popupStopLineName.toLowerCase()}`}
+															>
+																Voir les horaires
+															</Link>
 														</div>
 													) : (
 														<div className={'flex flex-col'}>
