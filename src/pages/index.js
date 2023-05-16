@@ -108,11 +108,32 @@ export default function Home() {
 											}}
 										>
 											<Popup>
-												{stop.stop_name}
-												<br />
-												{stop.location_type === 1 ? 'Bus' : 'Tram'}
-												<br />
-												{stop.wheelchair_boarding}
+												<div className={'flex flex-col'}>
+													{/* stop name */}
+													<span className={'text-sm font-bold'}>
+														{stop.stop_name}
+													</span>
+													{/* Type of stops */}
+													<span className={'text-xs text-slate-500'}>
+														Type : {stop.location_type === 1 ? 'Bus' : 'Tram'}
+													</span>
+													{/* wheelchair access */}
+													{stop.wheelchair_boarding === 1 && (
+														<div className={'flex'}>
+															<span className={'text-xs text-slate-500'}>
+																Accès :{' '}
+															</span>
+															{stop.wheelchair_boarding === 1 ? (
+																<Image
+																	src={'/leaflet/accessible.svg'}
+																	width={15}
+																	height={15}
+																	alt={'wheelchair'}
+																/>
+															) : null}
+														</div>
+													)}
+												</div>
 											</Popup>
 										</Marker>
 									)
