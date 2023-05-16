@@ -35,7 +35,7 @@ export default function Home() {
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=2000`,
+				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=1500`,
 				{
 					method: 'GET',
 					headers: {
@@ -90,9 +90,6 @@ export default function Home() {
 						center={gps_coordinates_nantes}
 						scrollWheelZoom={false}
 						zoom={16}
-						onDragend={value => {
-							console.log(value)
-						}}
 					>
 						{({ TileLayer, Marker, Popup }) => (
 							<>
@@ -105,7 +102,10 @@ export default function Home() {
 										<Marker
 											key={stop.id}
 											position={[stop.stop_lat, stop.stop_lon]}
-											icon={stop.location_type === 1 ? iconBus : iconTram}
+											icon={stop.location_type === 0 ? iconBus : iconTram}
+											eventHandlers={{
+												mouseover: event => event.target.openPopup(),
+											}}
 										>
 											<Popup>
 												{stop.stop_name}
