@@ -15,6 +15,7 @@ export default function Home() {
 	const [popupWheelchairAccessible, setPopupWheelchairAccessible] =
 		React.useState(null)
 	const [popupStopTimes, setPopupStopTimes] = React.useState(null)
+	const [shapes, setShapes] = React.useState([])
 	const [iconBus, setIconBus] = React.useState(null)
 	const [iconTram, setIconTram] = React.useState(null)
 	const [iconBusway, setIconBusway] = React.useState(null)
@@ -60,6 +61,12 @@ export default function Home() {
 				)
 			})
 		}
+		fetchShapes().then(res => {
+			console.log(res)
+			// filter res by shape_id and add an array with all the coordinates of the shape and order by shape_pt_sequence
+
+			setShapes(res)
+		})
 	}, [])
 
 	const { isLoading, isError, data, error } = useQuery({
@@ -79,6 +86,22 @@ export default function Home() {
 			return res.json()
 		},
 	})
+
+	const fetchShapes = async () => {
+		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_API_URL}/shapes?_limit=-1`,
+			{
+				method: 'GET',
+				headers: {
+					// 	token
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+			}
+		)
+		return res.json()
+	}
 
 	const fetchDataStopLimits = async stop_id => {
 		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
