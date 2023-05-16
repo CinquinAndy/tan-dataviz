@@ -49,6 +49,22 @@ export default function Home() {
 		},
 	})
 
+	const fetchDataStopLimits = async stop_id => {
+		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop_id}&_sort=trip_id:ASC`,
+			{
+				method: 'GET',
+				headers: {
+					// 	token
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+			}
+		)
+		return res.json()
+	}
+
 	if (isLoading) return <>loader</>
 
 	if (error) return 'An error has occurred: ' + error.message
@@ -104,7 +120,13 @@ export default function Home() {
 											position={[stop.stop_lat, stop.stop_lon]}
 											icon={stop.location_type === 0 ? iconBus : iconTram}
 											eventHandlers={{
-												mouseover: event => event.target.openPopup(),
+												mouseover: event => {
+													event.target.openPopup()
+													fetchDataStopLimits(stop.stop_id).then(r => {
+														console.log(r)
+													})
+												},
+												// 	https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-1&stop_id_contains=ABDU
 											}}
 										>
 											<Popup>
