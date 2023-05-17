@@ -22,6 +22,9 @@ export default function Home() {
 	const [iconBusway, setIconBusway] = React.useState(null)
 	const [iconNavibus, setIconNavibus] = React.useState(null)
 	const [iconNavette, setIconNavette] = React.useState(null)
+
+	const [filterSelected, setFilterSelected] = React.useState('all')
+
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			import('leaflet').then(L => {
@@ -62,30 +65,31 @@ export default function Home() {
 				)
 			})
 		}
-		fetchShapes().then(res => {
-			// console.log(res)
-			// filter res by shape_id and add an array with all the coordinates of the shape and order by shape_pt_sequence
-			function groupByShapeId(data) {
-				return data.reduce((acc, curr) => {
-					if (!acc[curr.shape_id]) {
-						acc[curr.shape_id] = []
-					}
-					acc[curr.shape_id].push([curr.shape_pt_lon, curr.shape_pt_lat])
-					return acc
-				}, {})
-			}
+		if (shapes !== []) {
+			fetchShapes().then(res => {
+				// console.log(res)
+				// filter res by shape_id and add an array with all the coordinates of the shape and order by shape_pt_sequence
+				function groupByShapeId(data) {
+					return data.reduce((acc, curr) => {
+						if (!acc[curr.shape_id]) {
+							acc[curr.shape_id] = []
+						}
+						acc[curr.shape_id].push([curr.shape_pt_lon, curr.shape_pt_lat])
+						return acc
+					}, {})
+				}
 
-			function objectToArray(groupedData) {
-				return Object.entries(groupedData).map(([shape_id, coordinates]) => {
-					return { shape_id, coordinates }
-				})
-			}
+				function objectToArray(groupedData) {
+					return Object.entries(groupedData).map(([shape_id, coordinates]) => {
+						return { shape_id, coordinates }
+					})
+				}
 
-			const groupedData = groupByShapeId(res)
-			const groupedArray = objectToArray(groupedData)
-			console.log(groupedArray)
-			setShapes(groupedArray)
-		})
+				const groupedData = groupByShapeId(res)
+				const groupedArray = objectToArray(groupedData)
+				setShapes(groupedArray)
+			})
+		}
 	}, [])
 
 	const { isLoading, isError, data, error } = useQuery({
@@ -185,6 +189,10 @@ export default function Home() {
 		return res.json()
 	}
 
+	const handleChangeFilterSelected = value => {
+		setFilterSelected(value)
+	}
+
 	if (isLoading) return <>loader</>
 
 	if (error) return 'An error has occurred: ' + error.message
@@ -198,7 +206,10 @@ export default function Home() {
 			</Head>
 
 			<section className={'flex h-screen w-screen'}>
-				<Nav />
+				<Nav
+					handleChangeFilterSelected={handleChangeFilterSelected}
+					filterSelected={filterSelected}
+				/>
 				{typeof window !== 'undefined' && (
 					<Map
 						width="800"
@@ -220,15 +231,14 @@ export default function Home() {
 									shapes.map(shape => {
 										console.log('shape')
 										console.log(shape)
-										// generate random color
-										let color =
-											'#' + Math.floor(Math.random() * 16777215).toString(16)
+										// generate random color, based on shape_id
+										const color = '#' + shape.shape_id.slice(0, 6)
 										const style = {
 											fillColor: 'transparent',
 											fillOpacity: 0,
 											weight: 2,
 											color: color,
-											opacity: 0.3,
+											opacity: 0.2,
 										}
 										return (
 											<Polyline
@@ -261,14 +271,19 @@ export default function Home() {
 											transport_type_icon = iconBus
 											break
 									}
-
+									let transport_type = stop.transport_type ?? 'bus'
+									if (filterSelected !== 'all') {
+										if (stop.transport_type !== filterSelected) {
+											return
+										}
+									}
 									return (
 										<Marker
 											key={stop.id}
 											position={[stop.stop_lat, stop.stop_lon]}
 											icon={transport_type_icon}
 											eventHandlers={{
-												mouseover: event => {
+												click: event => {
 													event.target.openPopup()
 													setPopupStopHeadsignName(null)
 													setPopupWheelchairAccessible(null)
@@ -349,6 +364,16 @@ export default function Home() {
 																			alt={'wheelchair'}
 																		/>
 																	) : null}
+																</div>
+															)}
+															{stop.stop_name === 'Hôtel Dieu' && (
+																<div className={'my-2 flex'}>
+																	<Image
+																		src={'/leaflet/streetview/img.png'}
+																		width={300}
+																		height={300}
+																		alt={'street'}
+																	/>
 																</div>
 															)}
 															<Link
