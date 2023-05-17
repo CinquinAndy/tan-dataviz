@@ -7,6 +7,28 @@ import { gps_coordinates_nantes } from '@/utils/consts'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
+function Nav() {
+	return (
+		<div className={'flex h-full w-1/5 flex-col bg-sky-950 p-10 text-slate-50'}>
+			<div className={'flex w-full items-center justify-center'}>
+				<Image
+					src={'/telecommuting.svg'}
+					width={'35'}
+					height={'35'}
+					alt={'logo'}
+				></Image>
+			</div>
+			<h2
+				className={'mt-3 flex items-center justify-center text-center text-xs'}
+			>
+				TaN
+				<br />
+				Dataviz
+			</h2>
+		</div>
+	)
+}
+
 export default function Home() {
 	const [isLoadingStopTimes, setIsLoadingStopTimes] = React.useState(true)
 	const [popupStopHeadsignName, setPopupStopHeadsignName] = React.useState(null)
@@ -62,10 +84,28 @@ export default function Home() {
 			})
 		}
 		fetchShapes().then(res => {
-			console.log(res)
+			// console.log(res)
 			// filter res by shape_id and add an array with all the coordinates of the shape and order by shape_pt_sequence
+			function groupByShapeId(data) {
+				return data.reduce((acc, curr) => {
+					if (!acc[curr.shape_id]) {
+						acc[curr.shape_id] = []
+					}
+					acc[curr.shape_id].push([curr.shape_pt_lon, curr.shape_pt_lat])
+					return acc
+				}, {})
+			}
 
-			setShapes(res)
+			function objectToArray(groupedData) {
+				return Object.entries(groupedData).map(([shape_id, coordinates]) => {
+					return { shape_id, coordinates }
+				})
+			}
+
+			const groupedData = groupByShapeId(res)
+			const groupedArray = objectToArray(groupedData)
+			console.log(groupedArray)
+			setShapes(groupedArray)
 		})
 	}, [])
 
@@ -73,7 +113,7 @@ export default function Home() {
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=1000`,
+				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=2000`,
 				{
 					method: 'GET',
 					headers: {
@@ -179,41 +219,48 @@ export default function Home() {
 			</Head>
 
 			<section className={'flex h-screen w-screen'}>
-				<div
-					className={'flex h-full w-1/5 flex-col bg-sky-950 p-10 text-slate-50'}
-				>
-					<div className={'flex w-full items-center justify-center'}>
-						<Image
-							src={'/telecommuting.svg'}
-							width={'35'}
-							height={'35'}
-							alt={'logo'}
-						></Image>
-					</div>
-					<h2
-						className={
-							'mt-3 flex items-center justify-center text-center text-xs'
-						}
-					>
-						TaN
-						<br />
-						Dataviz
-					</h2>
-				</div>
+				<Nav />
 				{typeof window !== 'undefined' && (
 					<Map
 						width="800"
 						height="400"
 						center={gps_coordinates_nantes}
-						scrollWheelZoom={false}
+						// scrollWheelZoom={false}
 						zoom={16}
 					>
-						{({ TileLayer, Marker, Popup }) => (
+						{({ TileLayer, Marker, Popup, Polyline, Polygon }) => (
 							<>
 								<TileLayer
 									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 									attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 								/>
+								{/*
+								 foreach shapes create a polyline
+								*/}
+								{shapes &&
+									shapes.map(shape => {
+										console.log('shape')
+										console.log(shape)
+										// generate random color
+										let color =
+											'#' + Math.floor(Math.random() * 16777215).toString(16)
+										const dixHuitStyle = {
+											weight: 2,
+											color: color,
+											opacity: 0.3,
+										}
+										return (
+											<Polygon
+												key={shape.shape_id}
+												pathOptions={dixHuitStyle}
+												positions={shape.coordinates.map(row => [
+													row[1],
+													row[0],
+												])}
+											/>
+										)
+									})}
+
 								{data.map(stop => {
 									let transport_type_icon = iconBus
 									switch (stop.transport_type) {
