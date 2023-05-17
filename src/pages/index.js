@@ -67,7 +67,6 @@ export default function Home() {
 		}
 		if (shapes !== []) {
 			fetchShapes().then(res => {
-				// console.log(res)
 				// filter res by shape_id and add an array with all the coordinates of the shape and order by shape_pt_sequence
 				function groupByShapeId(data) {
 					return data.reduce((acc, curr) => {
@@ -229,8 +228,6 @@ export default function Home() {
 								*/}
 								{shapes &&
 									shapes.map(shape => {
-										console.log('shape')
-										console.log(shape)
 										// generate random color, based on shape_id
 										const color = '#' + shape.shape_id.slice(0, 6)
 										const style = {
@@ -273,7 +270,7 @@ export default function Home() {
 									}
 									let transport_type = stop.transport_type ?? 'bus'
 									if (filterSelected !== 'all') {
-										if (stop.transport_type !== filterSelected) {
+										if (transport_type !== filterSelected) {
 											return
 										}
 									}
@@ -289,18 +286,12 @@ export default function Home() {
 													setPopupWheelchairAccessible(null)
 													setPopupStopType(null)
 													setIsLoadingStopTimes(true)
-													console.log('stop info global')
-													console.log(stop)
 													fetchDataStopLimits(stop.stop_id).then(r => {
 														if (r !== undefined && r.length > 0) {
-															console.log('stop')
-															console.log(r)
 															setPopupStopType(r[0].transport_type || 'BUS')
 
 															fetchDataTripsLimits(r[0].trip_id).then(r => {
 																if (r !== undefined && r.length > 0) {
-																	console.log('trip')
-																	console.log(r)
 																	setPopupStopHeadsignName(r[0].trip_headsign)
 																	setPopupWheelchairAccessible(
 																		r[0].wheelchair_accessible === 1
@@ -312,8 +303,6 @@ export default function Home() {
 																					r[0].route_short_name
 																				)
 																				setIsLoadingStopTimes(false)
-																				console.log('route')
-																				console.log(r[0])
 																			}
 																		}
 																	)
@@ -323,8 +312,6 @@ export default function Home() {
 													})
 													fetchDataStopTimes(stop.stop_id).then(r => {
 														if (r !== undefined && r.length > 0) {
-															console.log('stop times')
-															console.log(r)
 															setPopupStopTimes(r)
 														}
 													})

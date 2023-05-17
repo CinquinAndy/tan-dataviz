@@ -1,11 +1,15 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export function Nav(props) {
 	const handleChangeFilterSelected = props.handleChangeFilterSelected
 	const [filterSelected, setFilterSelected] = React.useState(
 		props.filterSelected
 	)
+
+	useEffect(() => {
+		handleChangeFilterSelected(filterSelected)
+	}, [filterSelected, handleChangeFilterSelected])
 
 	return (
 		<div
@@ -34,16 +38,13 @@ export function Nav(props) {
 				<div className={'flex flex-col items-center justify-center gap-4 '}>
 					<button
 						className={
-							'flex flex-col items-center justify-center gap-3 ' +
-							(filterSelected === 'bus' || filterSelected === 'all')
+							(filterSelected === 'bus' && filterSelected !== 'all'
 								? 'opacity-100'
-								: 'opacity-50'
+								: 'opacity-50') +
+							' flex flex-col items-center justify-center gap-3 '
 						}
 						onClick={() => {
-							handleChangeFilterSelected('bus')
-							filterSelected === 'bus'
-								? setFilterSelected('all')
-								: setFilterSelected('bus')
+							setFilterSelected('bus' === filterSelected ? 'all' : 'bus')
 						}}
 					>
 						<div className={'flex w-full justify-center'}>
@@ -58,16 +59,13 @@ export function Nav(props) {
 					</button>
 					<button
 						className={
-							'flex w-full flex-col items-center justify-center gap-3 ' +
-							(filterSelected === 'tram' || filterSelected === 'all')
+							(filterSelected === 'tram' && filterSelected !== 'all'
 								? 'opacity-100'
-								: 'opacity-50'
+								: 'opacity-50') +
+							' flex w-full flex-col items-center justify-center gap-3'
 						}
 						onClick={() => {
-							handleChangeFilterSelected('tram')
-							filterSelected === 'tram'
-								? setFilterSelected('all')
-								: setFilterSelected('tram')
+							setFilterSelected('tram' === filterSelected ? 'all' : 'tram')
 						}}
 					>
 						<div className={'flex w-full justify-center'}>
@@ -82,16 +80,15 @@ export function Nav(props) {
 					</button>
 					<button
 						className={
-							'flex w-full flex-col items-center justify-center gap-3 ' +
-							(filterSelected === 'navibus' || filterSelected === 'all')
+							(filterSelected === 'navibus' && filterSelected !== 'all'
 								? 'opacity-100'
-								: 'opacity-50'
+								: 'opacity-50') +
+							' flex w-full flex-col items-center justify-center gap-3'
 						}
 						onClick={() => {
-							handleChangeFilterSelected('navibus')
-							filterSelected === 'navibus'
-								? setFilterSelected('all')
-								: setFilterSelected('navibus')
+							setFilterSelected(
+								'navibus' === filterSelected ? 'all' : 'navibus'
+							)
 						}}
 					>
 						<div className={'flex w-full justify-center'}>
@@ -106,16 +103,13 @@ export function Nav(props) {
 					</button>
 					<button
 						className={
-							'flex w-full flex-col items-center justify-center gap-3 ' +
-							(filterSelected === 'busway' || filterSelected === 'all')
+							(filterSelected === 'busway' && filterSelected !== 'all'
 								? 'opacity-100'
-								: 'opacity-50'
+								: 'opacity-50') +
+							' flex w-full flex-col items-center justify-center gap-3'
 						}
 						onClick={() => {
-							handleChangeFilterSelected('busway')
-							filterSelected === 'busway'
-								? setFilterSelected('all')
-								: setFilterSelected('busway')
+							setFilterSelected('busway' === filterSelected ? 'all' : 'busway')
 						}}
 					>
 						<div className={'flex w-full justify-center'}>
@@ -130,16 +124,15 @@ export function Nav(props) {
 					</button>
 					<button
 						className={
-							'flex w-full flex-col items-center justify-center gap-3 ' +
-							(filterSelected === 'navette' || filterSelected === 'all')
+							(filterSelected === 'navette' && filterSelected !== 'all'
 								? 'opacity-100'
-								: 'opacity-50'
+								: 'opacity-50') +
+							' flex w-full flex-col items-center justify-center gap-3'
 						}
 						onClick={() => {
-							handleChangeFilterSelected('navette')
-							filterSelected === 'navette'
-								? setFilterSelected('all')
-								: setFilterSelected('navette')
+							setFilterSelected(
+								'navette' === filterSelected ? 'all' : 'navette'
+							)
 						}}
 					>
 						<div className={'flex w-full justify-center'}>
