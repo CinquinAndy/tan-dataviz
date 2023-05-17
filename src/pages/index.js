@@ -223,7 +223,9 @@ export default function Home() {
 										// generate random color
 										let color =
 											'#' + Math.floor(Math.random() * 16777215).toString(16)
-										const dixHuitStyle = {
+										const style = {
+											fillColor: 'transparent',
+											fillOpacity: 0,
 											weight: 2,
 											color: color,
 											opacity: 0.3,
@@ -231,7 +233,7 @@ export default function Home() {
 										return (
 											<Polygon
 												key={shape.shape_id}
-												pathOptions={dixHuitStyle}
+												pathOptions={style}
 												positions={shape.coordinates.map(row => [
 													row[1],
 													row[0],
