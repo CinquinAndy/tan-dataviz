@@ -231,7 +231,7 @@ export default function Home() {
 											opacity: 0.3,
 										}
 										return (
-											<Polygon
+											<Polyline
 												key={shape.shape_id}
 												pathOptions={style}
 												positions={shape.coordinates.map(row => [
