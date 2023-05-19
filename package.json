@@ -15,7 +15,7 @@
 		"@tanstack/query-core": "4.29.7",
 		"autoprefixer": "10.4.14",
 		"copy-webpack-plugin": "11.0.0",
-		"eslint": "8.40.0",
+		"eslint": "8.41.0",
 		"eslint-config-next": "13.4.3",
 		"husky": "8.0.3",
 		"leaflet": "1.9.4",
