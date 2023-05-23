@@ -95,7 +95,7 @@ export default function Home() {
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/stops?_limit=2000`,
+				`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stops?_limit=2000`,
 				{
 					method: 'GET',
 					headers: {
@@ -110,9 +110,9 @@ export default function Home() {
 	})
 
 	const fetchShapes = async () => {
-		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		// 	`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/shapes?_limit=-1`,
+			`https://strapi-tandataviz-core.beta.andy-cinquin.fr/shapes?_limit=-1`,
 			{
 				method: 'GET',
 				headers: {
@@ -126,9 +126,9 @@ export default function Home() {
 	}
 
 	const fetchDataStopLimits = async stop_id => {
-		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		// 	`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=1&stop_id_contains=${stop_id}&_sort=trip_id:ASC`,
+			`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=1&stop_id_contains=${stop_id}&_sort=trip_id:ASC`,
 			{
 				method: 'GET',
 				headers: {
@@ -143,7 +143,7 @@ export default function Home() {
 
 	const fetchDataStopTimes = async stop_id => {
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-11&stop_id_contains=${stop_id}&_sort=trip_id:ASC`,
+			`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-11&stop_id_contains=${stop_id}&_sort=trip_id:ASC`,
 			{
 				method: 'GET',
 				headers: {
@@ -157,9 +157,9 @@ export default function Home() {
 	}
 
 	const fetchDataTripsLimits = async trip_id => {
-		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		// 	`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/trips?_limit=1&trip_id=${trip_id}`,
+			`https://strapi-tandataviz-core.beta.andy-cinquin.fr/trips?_limit=1&trip_id=${trip_id}`,
 			{
 				method: 'GET',
 				headers: {
@@ -173,9 +173,9 @@ export default function Home() {
 	}
 
 	const fetchDataRoutesLimits = async route_id => {
-		// 	`${process.env.NEXT_PUBLIC_API_URL}/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
+		// 	`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stop-times?_limit=-1&stop_id_contains=${stop.stop_id}`
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/routes?_limit=1&route_id=${route_id}`,
+			`https://strapi-tandataviz-core.beta.andy-cinquin.fr/routes?_limit=1&route_id=${route_id}`,
 			{
 				method: 'GET',
 				headers: {
