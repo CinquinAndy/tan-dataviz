@@ -11,15 +11,16 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
-		"@tanstack/react-query": "4.29.7",
 		"@tanstack/query-core": "4.29.7",
+		"@tanstack/react-query": "4.29.7",
+		"ajv": "8.12.0",
 		"autoprefixer": "10.4.14",
 		"copy-webpack-plugin": "11.0.0",
-		"eslint": "8.41.0",
-		"eslint-config-next": "13.4.3",
+		"eslint": "8.40.0",
+		"eslint-config-next": "13.4.2",
 		"husky": "8.0.3",
-		"leaflet": "1.9.4",
-		"next": "13.4.3",
+		"leaflet": "1.9.3",
+		"next": "13.4.2",
 		"postcss": "8.4.23",
 		"prettier": "2.8.8",
 		"prettier-plugin-tailwindcss": "0.3.0",
@@ -28,6 +29,8 @@
 		"react-icons": "4.8.0",
 		"react-leaflet": "4.2.1",
 		"sharp": "0.32.1",
-		"tailwindcss": "3.3.2"
+		"tailwindcss": "3.3.2",
+		"typescript": "5.0.4",
+		"webpack": "5.83.1"
 	}
 }
