@@ -95,7 +95,7 @@ export default function Home() {
 		queryKey: ['stops'],
 		queryFn: async () => {
 			const res = await fetch(
-				`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stops?_limit=2000`,
+				`https://strapi-tandataviz-core.beta.andy-cinquin.fr/stops?_limit=-1`,
 				{
 					method: 'GET',
 					headers: {
